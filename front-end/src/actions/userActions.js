@@ -1,5 +1,5 @@
 import axios from 'axios'
-import axiosWithAuth from '../utils/axiosWithAuth'
+import {axiosWithAuth} from '../utils/axiosWithAuth'
 
 export const fetchUser = () =>{
     console.log('fetching user')
@@ -12,5 +12,12 @@ export const fetchUser = () =>{
             dispatch({type: 'FETCH_USER_SUCCESS', payload: res.data})
         })
         .catch(err=>{console.log(err)})
+    }
+}
+
+export const addDay = newDay =>{
+    console.log('adding a day')
+    return dispatch =>{
+        dispatch({type: 'ADD_DAY', payload: newDay})
     }
 }

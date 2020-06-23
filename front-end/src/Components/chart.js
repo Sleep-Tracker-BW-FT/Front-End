@@ -1,13 +1,29 @@
-import React from 'react';
+import React,{useState} from 'react';
 import CanvasJSReact from './canvasjs.react'
 import {connect} from 'react-redux'
  var CanvasJSChart = CanvasJSReact.CanvasJSChart
 
 const UserChart = props =>{
+    console.log('props in chart', props)
+
+    const morningMoods = props.sleepRecord.map(day=>{
+        return {x: day.day, y: day.morningMood}
+    })
+
+    const noonMoods = props.sleepRecord.map(day=>{
+        return {x: day.day, y: day.noonMood}
+    })
+
+    const eveningMoods = props.sleepRecord.map(day=>{
+        return {x: day.day, y: day.eveningMood}
+    })
+
+    console.log('morningMoods', morningMoods)
+
     const options = {
         animationEnabled: true,
         title:{
-            text: "Sleep Record"
+            text: "Moods Through the Day"
         },
         axisX: {
             valueFormatString: "Day #"
@@ -20,34 +36,19 @@ const UserChart = props =>{
             type: "spline",
             showInLegend: true,
             name: 'Morning Mood',
-            dataPoints: [
-                { x: 1, y: 1 },
-                { x: 2, y: 2 },
-                { x: 3, y: 3 },
-                { x: 4, y: 4 },
-                { x: 5, y: 3 },
-                { x: 6, y: 2 },
-                { x: 7, y: 1 },
-                { x: 8, y: 2 },
-                { x: 9, y: 3 },
-                { x: 10, y: 4 },
-                { x: 11, y: 3 },
-                { x: 12, y: 2 }
-            ]
+            dataPoints: morningMoods
         },
     {
         type: 'spline',
         showInLegend: true,
         name: 'Noon Mood',
-        dataPoints: [
-            {x: 1, y: 1},
-            {x: 2, y: 1},
-            {x: 3, y: 1},
-            {x: 4, y: 1},
-            {x: 5, y: 1},
-            {x: 6, y: 1},
-            {x: 7, y: 1},
-        ]
+        dataPoints: noonMoods
+    },
+    {
+        type: 'spline',
+        showInLegend: true,
+        name: 'Evening Mood',
+        dataPoints: eveningMoods
     }
     ]
     }
@@ -62,7 +63,7 @@ return(
 
 const mapStateToProps = state =>{
     return{
-        user: state
+        sleepRecord: state.sleepRecord
     }
 }
 

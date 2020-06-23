@@ -1,39 +1,42 @@
 import React, { useState } from 'react';
 import {connect} from 'react-redux'
 import UserChart from './chart'
-import axiosWithAuth from '../utils/axiosWithAuth'
+import {axiosWithAuth} from '../utils/axiosWithAuth'
+import {addDay} from '../actions/userActions'
+import SleepChart from './sleepChart'
 
 const UserPage = props =>{
     const [editting, setEditting] = useState(false)
     const [values, setValues] = useState({
         hours: 0,
-        morning: 1,
-        noon: 1,
-        evening: 1
+        morningMood: 1,
+        noonMood: 1,
+        eveningMood: 1
     })
-    const addNew = () =>{
-
-    }
 
     const changeHandler = e =>{
+        console.log("values", values)
         setValues({
             ...values,
-            [e.target.name]: e.target.value
+            [e.target.name]: Number(e.target.value)
         })
     }
 
     return(
         <div>
             <div>
-                <h1>userName Sleep Record</h1>
-                <p>You have logged (x) days with us so far!</p>
+                <h1>{props.user.username} Sleep Record</h1>
+                <p>You have logged {props.user.sleepRecord.length} days with us so far!</p>
                 <p>This chart below shows your current pattern of moods throughout each day</p>
                 <UserChart />
+                <SleepChart />
             </div>
             <div>
                 <button onClick={()=>setEditting(!editting)}>Add new day</button>
                 {editting && (<div>
-                    <form onSubmit={addNew}>                        
+                    <form onSubmit={(e)=>{
+                        e.preventDefault()
+                        props.addDay(values)}}>                        
                         <label>Hours slept</label>
                         <input 
                             name='hours'
@@ -43,7 +46,7 @@ const UserPage = props =>{
 
                         <label>Morning Mood</label>
                         <select
-                            name='morning'
+                            name='morningMood'
                             onChange={changeHandler}
                         >                        
                             <option value={1}>😴</option>
@@ -54,7 +57,7 @@ const UserPage = props =>{
 
                         <label>Noon mood</label>
                         <select
-                            name='noon'
+                            name='noonMood'
                             onChange={changeHandler}
                         >
                             <option value={1}>😴</option>
@@ -65,7 +68,7 @@ const UserPage = props =>{
 
                         <label>Evening mood</label>
                         <select
-                            name='evening'
+                            name='eveningMood'
                             onChange={changeHandler}
                         >
                             <option value={1}>😴</option>
@@ -88,4 +91,4 @@ const mapStateToProps=state=>{
     }
 }
 
-export default connect(mapStateToProps, {})(UserPage)
+export default connect(mapStateToProps, {addDay})(UserPage)
