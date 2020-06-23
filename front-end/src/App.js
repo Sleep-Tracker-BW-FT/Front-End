@@ -4,6 +4,8 @@ import UserPage from './Components/userPage'
 import {connect} from 'react-redux'
 import {BrowserRouter as Router, Switch, Link, Route} from 'react-router-dom'
 import PrivateRoute from './utils/PrivateRoute'
+import FormRegister from './Components/SignUp';
+import Login from './Components/Login'
 
 
 function App(props) {
@@ -13,8 +15,13 @@ function App(props) {
       <Router>
         <Link to='/login'>Login</Link>
         <Link to='/register'>Sign Up!</Link>
-        <Link to='/userpage'>Your Profile</Link>
       <Switch>
+        <Route path='/register'>
+          <FormRegister />
+        </Route>
+        <Route>
+          <Login />
+        </Route>
         <PrivateRoute path='/userpage' component={UserPage} />
         <Route path='/'>
           {props.isFetching && (<div>Currently loading User Data</div>)}
