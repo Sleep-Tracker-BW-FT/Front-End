@@ -7,12 +7,12 @@ const LandingPage = () =>{
         <div className = 'container' style={{backgroundColor:'#5B7B7A'}}>
         <section >
             <div className="topimg">
-                <img src="images/bed-linen-1149842_1280.jpg" alt="Bed with pillow and sheets" class = "bed" />
+                <img src="images/bed-linen-1149842_1280.jpg" alt="Bed with pillow and sheets" className = "bed" />
             </div>
         </section>
         <section>
-            <div className='sleep-tracker'> <p class= 'txt0'>Understand Your Sleep Schedule</p> </div>
-                <div class= "below-img-txt">
+            <div className='sleep-tracker'> <p className= 'txt0'>Understand Your Sleep Schedule</p> </div>
+                <div className= "below-img-txt">
                     
                     <span className= 'beg'>What is Sleep Tracker?</span>
                     <p className= 'txt txt1'>  <br />
@@ -28,11 +28,6 @@ const LandingPage = () =>{
                     </p>
                 </div>
         </section>
-        <footer>
-            <div className = 'theBottom'>
-                <a href="about.html" class= "bottom">About</a>
-            </div>
-        </footer>
     </div>
     )
 }

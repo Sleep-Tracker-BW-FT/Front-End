@@ -7,17 +7,16 @@ import PrivateRoute from './utils/PrivateRoute'
 import FormRegister from './Components/SignUp';
 import Login from './Components/Login'
 import LandingPage from './Components/landingPage'
+import EditPage from './Components/edit'
 
 
 
 function App(props) {
-  const logOut = (e)=>{
-    localStorage.removeItem('token')
-  }
+
   return (
     <div className="App">
       {/* <UserPage /> */}
-      <button onClick={logOut}>Log Out</button>
+}
       <Router>
       <header>
             <div className = "top">
@@ -34,6 +33,9 @@ function App(props) {
         </Route>
         <Route path='/login'>
           <Login />
+        </Route>
+        <Route path='/edit'>
+            <EditPage />
         </Route>
         <PrivateRoute path='/userpage' component={UserPage} />
         <Route exact path='/'>
