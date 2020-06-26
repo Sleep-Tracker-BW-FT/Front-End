@@ -1,26 +1,24 @@
-import React,{useState} from 'react';
+import React,{useState, useEffect} from 'react';
 import CanvasJSReact from './canvasjs.react'
 import {connect} from 'react-redux'
  var CanvasJSChart = CanvasJSReact.CanvasJSChart
 
 const UserChart = props =>{
     console.log('props in chart', props)
-
-    const morningMoods = props.sleepRecord.map(day=>{
-        return {x: day.day, y: day.morningMood}
+    //set the moods by mapping from props
+    const morningMoods =props.sleepRecord.map((day, index)=>{
+        return {x: index+1, y: day.morningMood}
     })
 
-    const noonMoods = props.sleepRecord.map(day=>{
-        return {x: day.day, y: day.noonMood}
+    const noonMoods = props.sleepRecord.map((day, index)=>{
+        return {x: index+1, y: day.noonMood}
     })
 
-    const eveningMoods = props.sleepRecord.map(day=>{
-        return {x: day.day, y: day.eveningMood}
+    const eveningMoods = props.sleepRecord.map((day, index)=>{
+        return {x: index +1, y: day.eveningMood}
     })
 
-    console.log('morningMoods', morningMoods)
-
-    const options = {
+    const options ={
         animationEnabled: true,
         title:{
             text: "Moods Through the Day"
@@ -52,11 +50,20 @@ const UserChart = props =>{
     }
     ]
     }
+
+
+
+    // console.log('morningMoods', morningMoods)
+
+
+
+    const style={
+        color: 'black',
+        backgroundColor:'white'
+    }
 return(
-    <div>
-    <CanvasJSChart options = {options}
-        /* onRef={ref => this.chart = ref} */
-    />
+    <div className='chart' style={style}>
+    <CanvasJSChart options = {options}/>
 </div>    
 )
 }

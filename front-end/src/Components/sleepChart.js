@@ -1,13 +1,14 @@
-import React,{useState} from 'react';
+import React,{useState, useEffect} from 'react';
 import CanvasJSReact from './canvasjs.react'
 import {connect} from 'react-redux'
  var CanvasJSChart = CanvasJSReact.CanvasJSChart
 
 const SleepChart = props =>{
-    console.log('props in Sleep chart', props)
+    // console.log('props in Sleep chart', props)
 
-    const sleepPerDay = props.sleepRecord.map(day=>{
-        return {x: day.day, y: day.hours}
+
+    const sleepPerDay = props.sleepRecord.map((day, index)=>{
+        return {x: index+1, y: day.hours}
     })
 
     const options = {

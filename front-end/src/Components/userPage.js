@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {connect} from 'react-redux'
 import UserChart from './chart'
 import {axiosWithAuth} from '../utils/axiosWithAuth'
@@ -15,7 +15,6 @@ const UserPage = props =>{
     })
 
     const changeHandler = e =>{
-        console.log("values", values)
         setValues({
             ...values,
             [e.target.name]: Number(e.target.value)
@@ -36,7 +35,7 @@ const UserPage = props =>{
                 {editting && (<div>
                     <form onSubmit={(e)=>{
                         e.preventDefault()
-                        props.addDay(values)}}>                        
+                        props.addDay({...values, id: props.user.id})}}>                        
                         <label>Hours slept</label>
                         <input 
                             name='hours'

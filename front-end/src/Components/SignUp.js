@@ -4,6 +4,8 @@ import React,{useState, useEffect} from 'react';
 import {Form, Row, FormGroup, FormFeedback, Label, Input} from 'reactstrap'
 import {useHistory} from 'react-router-dom'
 import {axiosWithAuth} from '../utils/axiosWithAuth'
+import {connect} from 'react-redux'
+import {createUser} from '../actions/userActions'
 
 
 const styling = {
@@ -14,7 +16,6 @@ const styling = {
     textAlign: 'right',
     paddingRight: '35px',
     paddingLeft: 'auto',
-    color: '#4c7031'
 }
 
 const originalRegisterValues = {
@@ -52,21 +53,15 @@ const FormRegister = props =>{
         }
     //since terms is checked will attempt to register user with api
     const newUser={
-      firstName:registerValues.firstName,
-      lastName: registerValues.lastName,
+      first_name:registerValues.firstName,
+      last_name: registerValues.lastName,
       email: registerValues.email,
       password: registerValues.password
     }
     
     console.log(newUser)
-    
-        axiosWithAuth()
-        .post('/api/auth/register', newUser)
-        .then(response=>{
-          console.log('response',response.data)
-          history.push('/login')
-        })
-        .catch(err=>{console.log('err', err)})
+    props.createUser(newUser)
+    history.push('/login')
       }
 
       const registerCheckbox =evt=>{
@@ -145,4 +140,8 @@ const FormRegister = props =>{
     )
 }
 
-export default FormRegister
+const mapStateToProps = state=>{
+  return state
+}
+
+export default connect(mapStateToProps, {createUser})(FormRegister)
