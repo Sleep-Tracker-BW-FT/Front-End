@@ -31,7 +31,8 @@ export const userReducer = (state=initialState, action)=>{
                         hours:totalSleep,
                         morningMood: day.start_score,
                         noonMood: day.end_score,
-                        eveningMood: day.overall_score
+                        eveningMood: day.overall_score,
+                        id: day.id
                     }
                 })
             }

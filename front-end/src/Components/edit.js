@@ -1,19 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React,{useState} from 'react'
 import {connect} from 'react-redux'
-import UserChart from './chart'
-import {axiosWithAuth} from '../utils/axiosWithAuth'
-import {addDay} from '../actions/userActions'
-import SleepChart from './sleepChart'
 import {useHistory} from 'react-router-dom'
+import {editEntry, deleteEntry} from '../actions/userActions'
 
-const UserPage = props =>{
+const EditPage = props =>{
+    console.log('props in EditPage', props)
+    const [edit, setEdit] = useState(false)
+    const clickHandler = day =>{
+        setEdit(true)
+        console.log('edit target', day)
+        setValues(day)
+    }
+
     const history = useHistory()
     const [editting, setEditting] = useState(false)
     const [values, setValues] = useState({
         hours: 0,
         morningMood: 1,
         noonMood: 1,
-        eveningMood: 1
+        eveningMood: 1,
+        id:0
     })
 
     const changeHandler = e =>{
@@ -22,34 +28,37 @@ const UserPage = props =>{
             [e.target.name]: Number(e.target.value)
         })
     }
+    
+    const records = props.sleepRecord.map((day, index)=>{
+        return(
+            <p onClick={e=>{
+                e.preventDefault()
+                clickHandler(day)
+            }} key={day.id}>Day:{index+1} Hours:{day.hours} Morning Mood:{day.morningMood} Noon Mood:{day.noonMood} Evening Mood:{day.eveningMood}</p>
+        )
+    })
+
 
     return(
         <div>
-            <div>
-                <h1>{props.user.username} Sleep Record</h1>
-                <p>You have logged {props.user.sleepRecord.length} days with us so far!</p>
-                <p>This chart below shows your current pattern of moods throughout each day</p>
-                <UserChart />
-                <SleepChart />
-            </div>
-            <div>
-                <button onClick={()=>setEditting(!editting)}>Add new day</button>
-                <button onClick={()=>history.push('/edit')}>Edit an entry?</button>
-                {editting && (<div>
+        {records}
+        {edit &&(
                     <form onSubmit={(e)=>{
                         e.preventDefault()
-                        props.addDay({...values, id: props.user.id})}}>                        
+                        props.editEntry({...values, user_id:props.id})}}>                        
                         <label>Hours slept</label>
                         <input 
                             name='hours'
                             onChange={changeHandler}
                             type= 'number'
+                            value={values.hours}
                         />
 
                         <label>Morning Mood</label>
                         <select
                             name='morningMood'
                             onChange={changeHandler}
+                            value={values.morningMood}
                         >                        
                             <option value={1}>😴</option>
                             <option value={2}>😑</option>
@@ -61,6 +70,7 @@ const UserPage = props =>{
                         <select
                             name='noonMood'
                             onChange={changeHandler}
+                            value={values.noonMood}
                         >
                             <option value={1}>😴</option>
                             <option value={2}>😑</option>
@@ -72,6 +82,7 @@ const UserPage = props =>{
                         <select
                             name='eveningMood'
                             onChange={changeHandler}
+                            value={values.eveningMood}
                         >
                             <option value={1}>😴</option>
                             <option value={2}>😑</option>
@@ -79,18 +90,22 @@ const UserPage = props =>{
                             <option value={4}>😃</option>                                
                         </select>
 
-                        <button name='submit'>Add Day</button>
+                        <button name='submit'>Change Day</button>
+                        <button name='delete' onClick={(e)=>{
+                            e.preventDefault()
+                            props.deleteEntry({...values, user_id:props.id})
+                            setEdit(false)
+                        }}>Delete Day</button>
                     </form>
-                    </div>)}
-            </div>
+        )}
         </div>
     )
+
+
 }
 
-const mapStateToProps=state=>{
-    return{
-        user: state
-    }
+const mapStateToProps = state =>{
+    return state
 }
 
-export default connect(mapStateToProps, {addDay})(UserPage)
+export default connect(mapStateToProps, {editEntry, deleteEntry}) (EditPage)

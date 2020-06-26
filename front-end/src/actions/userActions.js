@@ -65,6 +65,7 @@ export const addDay = newDay =>{
     }
 }
 
+
 export const createUser = (user) =>{
     return dispatch=>{
     console.log('creating user')
@@ -77,3 +78,58 @@ export const createUser = (user) =>{
     })
     .catch(err=>{console.log(err)})
 }}
+
+export const editEntry = day =>{
+    console.log('day given for Edit', day)
+    return dispatch =>{
+        dispatch({type: 'EDIT_ENTRY_START'})
+        const sleepEnd = (`2020-07-01 ${day.hours}:00:00`)
+        const submittedDay={
+                sleep_start:('2020-07-01 00:00:00'),
+                start_score: `${day.morningMood}`,
+                sleep_end:(sleepEnd),
+                end_score: `${day.noonMood}`,
+                overall_score: `${day.eveningMood}`,
+        }
+        console.log('submittedDay', submittedDay)
+        axiosWithAuth()
+        .put(`/api/users/${day.id}`, submittedDay)
+        .then(res=>{
+            dispatch({type:'EDIT_ENTRY_SUCCESS'})
+            dispatch({type: 'FETCH_USER_SLEEP_RECORD'})
+            axiosWithAuth()
+            .get('/api/users')
+            .then(res=>{
+                console.log('sleep timer data',res.data.time)
+                dispatch({type: 'USER_SLEEP_RECORD_FETCH_SUCCESS', payload: res.data.time})
+            })
+            .catch(err=>{
+                dispatch({type: 'USER_INFO_FETCH_FAIL'})
+                console.log(err)})
+        })
+        .catch(err=>{console.log(err); dispatch({type:'EDIT_ENTRY_FAIL'})})
+    }
+}
+
+export const deleteEntry =day =>{
+    return dispatch=>{
+        dispatch({type: 'DELETE_ENTRY_START'})
+        axiosWithAuth()
+        .delete(`/api/users/${day.id}`)
+        .then(res=>{
+            dispatch({type:'DELETE_ENTRY_SUCCESS'})
+            dispatch({type: 'FETCH_USER_SLEEP_RECORD'})
+            axiosWithAuth()
+            .get('/api/users')
+            .then(res=>{
+                console.log('sleep timer data',res.data.time)
+                dispatch({type: 'USER_SLEEP_RECORD_FETCH_SUCCESS', payload: res.data.time})
+            })
+            .catch(err=>{
+                dispatch({type: 'USER_INFO_FETCH_FAIL'})
+                console.log(err)})
+        })
+        .catch(err=>{console.log(err); dispatch({type:'DELETE_ENTRY_FAIL'})})
+    }
+ 
+}
